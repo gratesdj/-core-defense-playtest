@@ -1,0 +1,50 @@
+name: Deploy Core Defense playtest
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: core-defense-playtest-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out compiled artifact
+        uses: actions/checkout@v4
+
+      - name: Verify and unpack validated Web export
+        shell: bash
+        run: |
+          echo "6fa734831b87310c6bb8a2bfa06e793c86009157d3388f7cd1ee58ef81d06f3d  core-defense-browser.zip" | sha256sum -c -
+          mkdir -p _site packaged
+          unzip -q core-defense-browser.zip -d packaged
+          tar -xf packaged/artifact.tar -C _site
+          test -f _site/index.html
+          test -f _site/index.js
+          test -f _site/index.pck
+          test -f _site/index.wasm
+          test -f _site/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload compiled site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Publish playtest
+        id: deployment
+        uses: actions/deploy-pages@v4
