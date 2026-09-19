@@ -27,9 +27,10 @@ jobs:
       - name: Verify and unpack validated Web export
         shell: bash
         run: |
-          echo "7fa85836fd5eba22024bc49c9dff1ed4b63f02458b05de0563f30e46ea72d591  core-defense-browser.zip" | sha256sum -c -
+          curl --fail --location --retry 3 'https://sdmntprwestus3.oaiusercontent.com/files/00000000-0604-81fd-a457-5ba601916ddb/raw?se=2026-09-19T19%3A37%3A17Z&sp=r&sv=2026-02-06&sr=b&scid=c3f2ce79-485e-5fc7-b83d-5bf688bdfd8a&skoid=456594af-533f-44ef-9bdc-35ea2f9daee5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T14%3A08%3A21Z&ske=2026-09-20T14%3A08%3A21Z&sks=b&skv=2026-02-06&sig=LHHkcGWmRVNdKTDxfEG2yAsNVBl3i7o%2BCeJmhjerrrI%3D' -o /tmp/core-defense-browser.zip
+          echo "80a38a6424f4f34743a30ea3e53d15f32a3e640acbaea329d07c420c9878a06a  /tmp/core-defense-browser.zip" | sha256sum -c -
           mkdir -p _site packaged
-          unzip -q core-defense-browser.zip -d packaged
+          unzip -q /tmp/core-defense-browser.zip -d packaged
           tar -xf packaged/artifact.tar -C _site
           test -f _site/index.html
           test -f _site/index.js
