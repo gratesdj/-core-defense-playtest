@@ -1,0 +1,44 @@
+name: Promote validated visible World Gen v2 artifact once
+
+on:
+  push:
+    paths:
+      - .github/workflows/promote-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download and verify compiled artifact
+        env:
+          ARTIFACT_URL: "https://sdmntpreastus2.oaiusercontent.com/files/00000000-7c68-81f6-9a5f-a0de372a8760/raw?se=2026-09-20T22%3A06%3A03Z&sp=r&sv=2026-02-06&sr=b&scid=5807ec53-ba01-497b-aa7f-e84a4dec9230&skoid=dd316919-ffbf-4550-9c54-dfc99f412009&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-20T15%3A10%3A17Z&ske=2026-09-21T15%3A10%3A17Z&sks=b&skv=2026-02-06&sig=qxaCgXMSpHllebniPDA2Cb%2BX5%2B/Xy0XliSdnVL9amEw%3D"
+        run: |
+          curl --fail --location --silent --show-error "$ARTIFACT_URL" -o /tmp/core-defense-browser.zip
+          echo "0b7dcb2a919a8fdfa052d29e4487f0dda7b9eb0df91049aa07b4c7324ed2d840  /tmp/core-defense-browser.zip" | sha256sum -c -
+          cp /tmp/core-defense-browser.zip core-defense-browser.zip
+
+      - name: Update deployment provenance
+        run: |
+          printf '%s\n' \
+            'Core Defense browser playtest' \
+            'Source build: gratesdj/core-defense-rpg@f05350c13d39fbe5f884b926c9d0f7216fdaad68' \
+            'Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/35540235021' \
+            'Artifact digest: sha256:0b7dcb2a919a8fdfa052d29e4487f0dda7b9eb0df91049aa07b4c7324ed2d840' \
+            > BUILD_SHA.txt
+          sed -i 's/23038c40c90679db27cace842a3040180deab93e/f05350c13d39fbe5f884b926c9d0f7216fdaad68/g' README.md
+          sed -i 's/e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05/0b7dcb2a919a8fdfa052d29e4487f0dda7b9eb0df91049aa07b4c7324ed2d840/g' README.md
+
+      - name: Publish compiled artifact commit
+        run: |
+          git config user.name "Core Defense QA"
+          git config user.email "actions@users.noreply.github.com"
+          git add core-defense-browser.zip BUILD_SHA.txt README.md
+          git commit -m "Deploy validated visible World Gen v2 build f05350c"
+          git push
