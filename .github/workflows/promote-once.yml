@@ -1,0 +1,45 @@
+name: Promote validated World Generation v2 foundation artifact once
+
+on:
+  push:
+    paths:
+      - .github/workflows/promote-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Download and verify compiled artifact
+        env:
+          ARTIFACT_URL: "https://sdmntpreastus.oaiusercontent.com/files/00000000-e660-81f9-b3f2-40f269f77a0b/raw?se=2026-09-20T03%3A04%3A31Z&sp=r&sv=2026-02-06&sr=b&scid=5882ba0a-9e0d-4a34-8426-b65be955f979&skoid=e96cf01c-9c0f-4e27-b41e-0f2e435e6532&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-19T11%3A51%3A14Z&ske=2026-09-20T11%3A51%3A14Z&sks=b&skv=2026-02-06&sig=%2BItGx1GXCpcCizSZjAncUHBcUeyek/1UaIz4YhZ/Lok%3D"
+        run: |
+          curl --fail --location --silent --show-error "$ARTIFACT_URL" -o /tmp/core-defense-browser.zip
+          echo "e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05  /tmp/core-defense-browser.zip" | sha256sum -c -
+          cp /tmp/core-defense-browser.zip core-defense-browser.zip
+
+      - name: Update deployment provenance
+        run: |
+          printf '%s\n' \
+            'Core Defense browser playtest' \
+            'Source build: gratesdj/core-defense-rpg@23038c40c90679db27cace842a3040180deab93e' \
+            'Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/35485297388' \
+            'Artifact digest: sha256:e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05' \
+            > BUILD_SHA.txt
+          sed -i 's/5fd5d46b781a0b86cc81e7cd3d3dd15460a33f7fb4bcb8d54d9a4c2d7ea87194/e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05/g' .github/workflows/deploy.yml
+          sed -i 's/e194e0a92230cd17465f70afa365ec7951dda807/23038c40c90679db27cace842a3040180deab93e/g' README.md
+          sed -i 's/5fd5d46b781a0b86cc81e7cd3d3dd15460a33f7fb4bcb8d54d9a4c2d7ea87194/e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05/g' README.md
+
+      - name: Publish compiled artifact commit
+        run: |
+          git config user.name "Core Defense QA"
+          git config user.email "actions@users.noreply.github.com"
+          git add core-defense-browser.zip BUILD_SHA.txt README.md .github/workflows/deploy.yml
+          git commit -m "Deploy validated World Generation v2 foundation 23038c4"
+          git push
