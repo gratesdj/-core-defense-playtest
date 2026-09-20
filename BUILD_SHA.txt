@@ -1,4 +1,4 @@
 Core Defense browser playtest
-Source build: gratesdj/core-defense-rpg@23038c40c90679db27cace842a3040180deab93e
-Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/35485297388
-Artifact digest: sha256:e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05
+Source build: gratesdj/core-defense-rpg@f05350c13d39fbe5f884b926c9d0f7216fdaad68
+Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/35540235021
+Artifact digest: sha256:0b7dcb2a919a8fdfa052d29e4487f0dda7b9eb0df91049aa07b4c7324ed2d840
