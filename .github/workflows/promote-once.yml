@@ -32,7 +32,6 @@ jobs:
             'Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/35485297388' \
             'Artifact digest: sha256:e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05' \
             > BUILD_SHA.txt
-          sed -i 's/5fd5d46b781a0b86cc81e7cd3d3dd15460a33f7fb4bcb8d54d9a4c2d7ea87194/e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05/g' .github/workflows/deploy.yml
           sed -i 's/e194e0a92230cd17465f70afa365ec7951dda807/23038c40c90679db27cace842a3040180deab93e/g' README.md
           sed -i 's/5fd5d46b781a0b86cc81e7cd3d3dd15460a33f7fb4bcb8d54d9a4c2d7ea87194/e8e9ba41628fe54c8cccb7213fda55c39329087aafdc9a639c12e4fa2053ca05/g' README.md
 
@@ -40,6 +39,6 @@ jobs:
         run: |
           git config user.name "Core Defense QA"
           git config user.email "actions@users.noreply.github.com"
-          git add core-defense-browser.zip BUILD_SHA.txt README.md .github/workflows/deploy.yml
+          git add core-defense-browser.zip BUILD_SHA.txt README.md
           git commit -m "Deploy validated World Generation v2 foundation 23038c4"
           git push
