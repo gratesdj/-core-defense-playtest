@@ -1,0 +1,42 @@
+name: Promote clustered resource build once
+
+on:
+  push:
+    paths:
+      - .github/workflows/promote-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Download and verify compiled artifact
+        env:
+          ARTIFACT_URL: "https://sdmntpritalynorth.oaiusercontent.com/files/00000000-1fd0-8246-a69a-f263838a399d/raw?se=2026-09-21T03%3A05%3A14Z&sp=r&sv=2026-02-06&sr=b&scid=9a06be40-9b21-40b9-b9d2-a220f205c208&skoid=82a3371f-2f6c-4f81-8a78-2701b362559b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-20T04%3A36%3A53Z&ske=2026-09-21T04%3A36%3A53Z&sks=b&skv=2026-02-06&sig=sp/C5hPF68X0JIwcIklQdTxns1dLpYyHMKWWdB7qQLo%3D"
+        run: |
+          curl --fail --location --silent --show-error "$ARTIFACT_URL" -o /tmp/core-defense-browser.zip
+          echo "fc77028cd5da1bd70258c3d6ed86aaf74baa53cdccd5e8440224c7887198370f  /tmp/core-defense-browser.zip" | sha256sum -c -
+          cp /tmp/core-defense-browser.zip core-defense-browser.zip
+      - name: Update deployment provenance and verifier
+        run: |
+          printf '%s\n' \
+            'Core Defense browser playtest' \
+            'Source build: gratesdj/core-defense-rpg@ebc313781dc1f885cb55460ab6a6d219e310f938' \
+            'Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/35555890808' \
+            'Artifact digest: sha256:fc77028cd5da1bd70258c3d6ed86aaf74baa53cdccd5e8440224c7887198370f' \
+            > BUILD_SHA.txt
+          sed -i -E 's/Current validated source build: `[0-9a-f]+`/Current validated source build: `ebc313781dc1f885cb55460ab6a6d219e310f938`/' README.md
+          sed -i -E 's/Validated artifact digest: `sha256:[0-9a-f]+`/Validated artifact digest: `sha256:fc77028cd5da1bd70258c3d6ed86aaf74baa53cdccd5e8440224c7887198370f`/' README.md
+          sed -i -E 's/[0-9a-f]{64}  core-defense-browser\.zip/fc77028cd5da1bd70258c3d6ed86aaf74baa53cdccd5e8440224c7887198370f  core-defense-browser.zip/' .github/workflows/deploy.yml
+      - name: Publish compiled artifact commit
+        run: |
+          git config user.name "Core Defense QA"
+          git config user.email "actions@users.noreply.github.com"
+          git add core-defense-browser.zip BUILD_SHA.txt README.md .github/workflows/deploy.yml
+          git commit -m "Deploy clustered resource world ebc3137"
+          git push
