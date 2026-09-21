@@ -2,7 +2,7 @@
 
 [Play the current validated build](https://gratesdj.github.io/-core-defense-playtest/)
 
-This public repository contains only the compiled Godot Web playtest artifact and its deployment workflow.
+This public repository contains only the compiled Godot Web playtest artifact, stored in verified chunks for reliable upload, plus provenance and its deployment workflow.
 
 Source code and development history remain private in `gratesdj/core-defense-rpg`.
 
