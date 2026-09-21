@@ -22,7 +22,7 @@ jobs:
           curl --fail --location --silent --show-error "$ARTIFACT_URL" -o /tmp/core-defense-browser.zip
           echo "fc77028cd5da1bd70258c3d6ed86aaf74baa53cdccd5e8440224c7887198370f  /tmp/core-defense-browser.zip" | sha256sum -c -
           cp /tmp/core-defense-browser.zip core-defense-browser.zip
-      - name: Update deployment provenance and verifier
+      - name: Update deployment provenance
         run: |
           printf '%s\n' \
             'Core Defense browser playtest' \
@@ -37,6 +37,6 @@ jobs:
         run: |
           git config user.name "Core Defense QA"
           git config user.email "actions@users.noreply.github.com"
-          git add core-defense-browser.zip BUILD_SHA.txt README.md .github/workflows/deploy.yml
+          git add core-defense-browser.zip BUILD_SHA.txt README.md
           git commit -m "Deploy clustered resource world ebc3137"
           git push
