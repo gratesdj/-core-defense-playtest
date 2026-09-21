@@ -1,0 +1,41 @@
+name: Promote direct-controls build once
+
+on:
+  push:
+    paths:
+      - .github/workflows/promote-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Download and verify compiled artifact
+        env:
+          ARTIFACT_URL: "https://sdmntprwestus3.oaiusercontent.com/files/00000000-0e20-81fd-abc1-7b1feedbd66c/raw?se=2026-09-21T03%3A59%3A46Z&sp=r&sv=2026-02-06&sr=b&scid=13da1a12-a309-495e-8d0b-657b921e8577&skoid=5e713cdb-766b-475e-a3ca-8adb6cf99aa0&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-21T01%3A15%3A45Z&ske=2026-09-22T01%3A15%3A45Z&sks=b&skv=2026-02-06&sig=CI%2Bf9cFuDZOJNzsz0/HxNOLgv8B1jhMMFs8f/lcEG88%3D"
+        run: |
+          curl --fail --location --silent --show-error "$ARTIFACT_URL" -o /tmp/core-defense-browser.zip
+          echo "e5ed8eed6b7fd980688ce8c395a7faf90c9184a08fd9f5e86640e85371709f14  /tmp/core-defense-browser.zip" | sha256sum -c -
+          cp /tmp/core-defense-browser.zip core-defense-browser.zip
+      - name: Update deployment provenance
+        run: |
+          printf '%s\n' \
+            'Core Defense browser playtest' \
+            'Source build: gratesdj/core-defense-rpg@99f4424a7424af40eda33a850049e1777b1fc23a' \
+            'Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/35558968865' \
+            'Artifact digest: sha256:e5ed8eed6b7fd980688ce8c395a7faf90c9184a08fd9f5e86640e85371709f14' \
+            > BUILD_SHA.txt
+          sed -i -E 's/Current validated source build: `[0-9a-f]+`/Current validated source build: `99f4424a7424af40eda33a850049e1777b1fc23a`/' README.md
+          sed -i -E 's/Validated artifact digest: `sha256:[0-9a-f]+`/Validated artifact digest: `sha256:e5ed8eed6b7fd980688ce8c395a7faf90c9184a08fd9f5e86640e85371709f14`/' README.md
+      - name: Publish compiled artifact commit
+        run: |
+          git config user.name "Core Defense QA"
+          git config user.email "actions@users.noreply.github.com"
+          git add core-defense-browser.zip BUILD_SHA.txt README.md
+          git commit -m "Deploy direct-controls foundation 99f4424"
+          git push
