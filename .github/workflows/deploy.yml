@@ -27,7 +27,7 @@ jobs:
       - name: Verify and unpack validated Web export
         shell: bash
         run: |
-          echo "fe6778126ce69fe6d46c621e5989c4cabfd3a33fa2286e91186a71d231d6ae6b  core-defense-browser.zip" | sha256sum -c -
+          echo "fc77028cd5da1bd70258c3d6ed86aaf74baa53cdccd5e8440224c7887198370f  core-defense-browser.zip" | sha256sum -c -
           mkdir -p _site packaged
           unzip -q core-defense-browser.zip -d packaged
           tar -xf packaged/artifact.tar -C _site
