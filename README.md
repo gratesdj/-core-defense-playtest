@@ -6,8 +6,8 @@ This public repository contains only the compiled Godot Web playtest artifact, s
 
 Source code and development history remain private in `gratesdj/core-defense-rpg`.
 
-Current validated source build: `7be06efed97b6b18c71bfff39133e15eb30f06e4`
+Current validated source build: `27dbc64d708137cfba9d2ce6b721a67658441296`
 
-Validated artifact digest: `sha256:324a9dfb96284e5ea6a9f0e0ed9cdbbd52af9dfb4d8e98dc10fe7d291cbdd380`
+Validated artifact digest: `sha256:59c9c464f2404b02549e0140675dd9615c70afdcb770a2d702466eefd84753ef`
 
-Private validation: [workflow run 35604189048](https://github.com/gratesdj/core-defense-rpg/actions/runs/35604189048)
+Private validation: [workflow run 35609005969](https://github.com/gratesdj/core-defense-rpg/actions/runs/35609005969)
