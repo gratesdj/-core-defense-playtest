@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           cat artifact-parts/core-defense-browser.zip.part-* > core-defense-browser.zip
-          echo "af24d909815962529fa8e6ce20c32cdcf8fa92567d656a03b31df2310edd8d21  core-defense-browser.zip" | sha256sum -c -
+          echo "f7e8b320e684fc4e8a232d42d49c9a61c21a492ff0cd4586189bae12b5e3d4d7  core-defense-browser.zip" | sha256sum -c -
           mkdir -p _site packaged
           unzip -q core-defense-browser.zip -d packaged
           tar -xf packaged/artifact.tar -C _site
