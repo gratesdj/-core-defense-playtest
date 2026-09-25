@@ -1,6 +1,5 @@
 Core Defense browser playtest
-Source build: gratesdj/core-defense-rpg@58adc11cd9d0fa69dcb4406fb99e2d8dc3373d52
-Visual readability change: 43834ed2bb64f1099302ebdb52bc8d65488c99ab
-Visual repair: 58adc11cd9d0fa69dcb4406fb99e2d8dc3373d52
-Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/36105031347
-Artifact digest: sha256:db2e35d5fd078d8cf888eed5eba5ec6ebad7bdd5defd9427a30bb2dbb7ad35fa
+Source build: gratesdj/core-defense-rpg@95c2e7f7a93cad6b559aa6e72de0b8ce72a7ba79
+Gameplay change: loaded Peon return-to-Core, cargo preserved, ready-to-deposit boundary
+Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/36110216682
+Artifact digest: sha256:116e5f2a27e016af56b06fb7ec8b5f2953991f9a65c6df3b8dd2d6495b9fea8b
