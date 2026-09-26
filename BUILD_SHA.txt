@@ -1,5 +1,5 @@
 Core Defense browser playtest
-Source build: gratesdj/core-defense-rpg@282dc6a822167aeb46b7f8cb948e9092fd8a7acb
-Gameplay change: coherent low-noise terrain, crisp pixel-snapped rendering, and normal-play overlays removed; gameplay unchanged
-Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/36137736879
-Artifact digest: sha256:6a692d26127c83ba47234f849d80b212ac83f9dd4a5a3ca549cfd68468f00cbf
+Source build: gratesdj/core-defense-rpg@ec4df0106efec05b5a0c4c74b11d74211da3e3e4
+Visual change: deterministic 2px cosmetic sub-tile detail over unchanged 16px simulation cells
+Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/36183203462
+Artifact digest: sha256:da41703d7f5e050f59cc4126e5254ea6300acfbdba1fe6baec1abb636168d4f2
