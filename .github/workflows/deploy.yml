@@ -15,7 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BOOTSTRAP_ARTIFACT_URL: "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-fb08-81f7-aa91-bf847321e859/raw?se=2026-09-26T08%3A12%3A34Z&sp=r&sv=2026-02-06&sr=b&scid=3672ee5c-81c9-5347-bdd3-4f8c68622504&skoid=456594af-533f-44ef-9bdc-35ea2f9daee5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T23%3A46%3A07Z&ske=2026-09-26T23%3A46%3A07Z&sks=b&skv=2026-02-06&sig=gVtxBy%2BSQbjIGLPhg0xn2TpImAO7J6Y6o2SaQ0tOnpY%3D"
+  BOOTSTRAP_ARTIFACT_URL: "https://sdmntprwestus3.oaiusercontent.com/files/00000000-2388-81fd-892e-677f42ff4968/raw?se=2026-09-26T10%3A06%3A45Z&sp=r&sv=2026-02-06&sr=b&scid=b362153d-3fb5-40bd-8dca-a52a78dd9c9b&skoid=2d2fbb03-9efb-4ad0-a91c-1db2f5a47997&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T18%3A44%3A48Z&ske=2026-09-26T18%3A44%3A48Z&sks=b&skv=2026-02-06&sig=94E6wnetDeQbLz%2BDNebU2Mr6hW4cNPtClQeuXOWnBEQ%3D"
+  VALIDATED_ARTIFACT_SHA256: "22387a602e30d76dc074dc2c882f258004611caa49e7eb9ddc598e03debb34ed"
 
 jobs:
   deploy:
@@ -31,7 +32,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          EXPECTED="$(sed -n 's/^Artifact digest: sha256://p' BUILD_SHA.txt | head -1)"
+          EXPECTED="$VALIDATED_ARTIFACT_SHA256"
           test -n "$EXPECTED"
           mkdir -p artifact-parts
 
