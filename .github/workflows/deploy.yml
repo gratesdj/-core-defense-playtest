@@ -6,13 +6,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
 concurrency:
   group: core-defense-playtest-pages
   cancel-in-progress: true
+
+env:
+  BOOTSTRAP_ARTIFACT_URL: "https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-fb08-81f7-aa91-bf847321e859/raw?se=2026-09-26T08%3A12%3A34Z&sp=r&sv=2026-02-06&sr=b&scid=3672ee5c-81c9-5347-bdd3-4f8c68622504&skoid=456594af-533f-44ef-9bdc-35ea2f9daee5&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T23%3A46%3A07Z&ske=2026-09-26T23%3A46%3A07Z&sks=b&skv=2026-02-06&sig=gVtxBy%2BSQbjIGLPhg0xn2TpImAO7J6Y6o2SaQ0tOnpY%3D"
 
 jobs:
   deploy:
@@ -24,11 +27,42 @@ jobs:
       - name: Check out compiled artifact
         uses: actions/checkout@v4
 
-      - name: Verify and unpack validated Web export
+      - name: Reconstruct or cache validated Web export
         shell: bash
         run: |
-          cat artifact-parts/core-defense-browser.zip.part-* > core-defense-browser.zip
-          echo "da41703d7f5e050f59cc4126e5254ea6300acfbdba1fe6baec1abb636168d4f2  core-defense-browser.zip" | sha256sum -c -
+          set -euo pipefail
+          EXPECTED="$(sed -n 's/^Artifact digest: sha256://p' BUILD_SHA.txt | head -1)"
+          test -n "$EXPECTED"
+          mkdir -p artifact-parts
+
+          VALID_LOCAL=0
+          if compgen -G "artifact-parts/core-defense-browser.zip.part-*" > /dev/null; then
+            cat artifact-parts/core-defense-browser.zip.part-* > core-defense-browser.zip
+            ACTUAL="$(sha256sum core-defense-browser.zip | awk '{print $1}')"
+            if [ "$ACTUAL" = "$EXPECTED" ]; then
+              VALID_LOCAL=1
+            fi
+          fi
+
+          if [ "$VALID_LOCAL" -ne 1 ]; then
+            echo "Cached artifact is stale; fetching the exact validated candidate."
+            curl -L --fail --retry 3 --retry-delay 2 "$BOOTSTRAP_ARTIFACT_URL" -o core-defense-browser.zip
+            echo "$EXPECTED  core-defense-browser.zip" | sha256sum -c -
+
+            rm -f artifact-parts/core-defense-browser.zip.part-*
+            split -b 700000 -d -a 2 core-defense-browser.zip artifact-parts/core-defense-browser.zip.part-
+
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add artifact-parts
+            if ! git diff --cached --quiet; then
+              git commit -m "build: cache adaptive-terrain playtest artifact [skip ci]"
+              git push
+            fi
+          else
+            echo "$EXPECTED  core-defense-browser.zip" | sha256sum -c -
+          fi
+
           mkdir -p _site packaged
           unzip -q core-defense-browser.zip -d packaged
           tar -xf packaged/artifact.tar -C _site
