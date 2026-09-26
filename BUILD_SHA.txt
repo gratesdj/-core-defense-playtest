@@ -1,5 +1,8 @@
 Core Defense browser playtest
-Source build: gratesdj/core-defense-rpg@ec4df0106efec05b5a0c4c74b11d74211da3e3e4
-Visual change: deterministic 2px cosmetic sub-tile detail over unchanged 16px simulation cells
-Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/36183203462
-Artifact digest: sha256:da41703d7f5e050f59cc4126e5254ea6300acfbdba1fe6baec1abb636168d4f2
+Source build: gratesdj/core-defense-rpg@71c7ebbf76b9be1085bf90a41e18384f62a6a538
+Source branch: visual-foundation-pass1
+Visual change: adaptive cave terrain pass 1 — coherent floor, wall rims/depth, sub-cell boundary shaping, continuous shoreline, multi-cell material motifs
+Validated workflow: https://github.com/gratesdj/core-defense-rpg/actions/runs/36228456880
+Build job: PASSED (all protected tests + Web export + artifact upload)
+Artifact digest: sha256:5d6db13769bbacac3bd3b32788b9a7a03044f91e8700f3f13bf33679bed3034b
+Human review status: candidate; do not promote to source main until screenshot review
