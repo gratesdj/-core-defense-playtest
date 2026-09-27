@@ -15,8 +15,8 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  BOOTSTRAP_ARTIFACT_URL: "https://sdmntprwestus3.oaiusercontent.com/files/00000000-2388-81fd-892e-677f42ff4968/raw?se=2026-09-26T10%3A06%3A45Z&sp=r&sv=2026-02-06&sr=b&scid=b362153d-3fb5-40bd-8dca-a52a78dd9c9b&skoid=2d2fbb03-9efb-4ad0-a91c-1db2f5a47997&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-25T18%3A44%3A48Z&ske=2026-09-26T18%3A44%3A48Z&sks=b&skv=2026-02-06&sig=94E6wnetDeQbLz%2BDNebU2Mr6hW4cNPtClQeuXOWnBEQ%3D"
-  VALIDATED_ARTIFACT_SHA256: "22387a602e30d76dc074dc2c882f258004611caa49e7eb9ddc598e03debb34ed"
+  BOOTSTRAP_ARTIFACT_URL: "https://sdmntprwestus.oaiusercontent.com/files/00000000-9e48-8230-80a0-f31c363acebe/raw?se=2026-09-27T15%3A02%3A42Z&sp=r&sv=2026-02-06&sr=b&scid=25b7ac83-7fef-4109-a762-fd97b49de9f9&skoid=864daabb-d06a-46b3-a747-d35075313a83&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-09-26T17%3A24%3A05Z&ske=2026-09-27T17%3A24%3A05Z&sks=b&skv=2026-02-06&sig=7NjT5Zif/ZbIgm2wHFp8bxasnvV2ZrtJZ7is4E/IXz4%3D"
+  VALIDATED_ARTIFACT_SHA256: "cafe42aaa7dc8a51b584e4cfab1740d7a7e851f0de8b44494288431831b244c1"
 
 jobs:
   deploy:
@@ -57,7 +57,7 @@ jobs:
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add artifact-parts
             if ! git diff --cached --quiet; then
-              git commit -m "build: cache adaptive-terrain playtest artifact [skip ci]"
+              git commit -m "build: cache authored-tree playtest artifact [skip ci]"
               git push
             fi
           else
